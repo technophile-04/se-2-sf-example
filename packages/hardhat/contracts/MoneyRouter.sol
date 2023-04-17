@@ -15,12 +15,14 @@ contract MoneyRouter {
 
   /// @notice CFA Library.
   using SuperTokenV1Library for ISuperToken;
+  ISuperToken public immutable superToken;
 
   /// @notice Allow list.
   mapping(address => bool) public accountList;
 
-  constructor(address _owner) {
+  constructor(address _owner, ISuperToken token) {
     owner = _owner;
+    superToken = token;
   }
 
   /// @notice Add account to allow list.
@@ -95,31 +97,28 @@ contract MoneyRouter {
   }
 
   /// @notice Create flow from contract to specified address.
-  /// @param token Token to stream.
   /// @param receiver Receiver of stream.
   /// @param flowRate Flow rate per second to stream.
-  function createFlowFromContract(ISuperToken token, address receiver, int96 flowRate) external {
+  function createFlowFromContract(address receiver, int96 flowRate) external {
     if (!accountList[msg.sender] && msg.sender != owner) revert Unauthorized();
 
-    token.createFlow(receiver, flowRate);
+    superToken.createFlow(receiver, flowRate);
   }
 
   /// @notice Update flow from contract to specified address.
-  /// @param token Token to stream.
   /// @param receiver Receiver of stream.
   /// @param flowRate Flow rate per second to stream.
-  function updateFlowFromContract(ISuperToken token, address receiver, int96 flowRate) external {
+  function updateFlowFromContract(address receiver, int96 flowRate) external {
     if (!accountList[msg.sender] && msg.sender != owner) revert Unauthorized();
 
-    token.updateFlow(receiver, flowRate);
+    superToken.updateFlow(receiver, flowRate);
   }
 
   /// @notice Delete flow from contract to specified address.
-  /// @param token Token to stop streaming.
   /// @param receiver Receiver of stream.
-  function deleteFlowFromContract(ISuperToken token, address receiver) external {
+  function deleteFlowFromContract(address receiver) external {
     if (!accountList[msg.sender] && msg.sender != owner) revert Unauthorized();
 
-    token.deleteFlow(address(this), receiver);
+    superToken.deleteFlow(address(this), receiver);
   }
 }
