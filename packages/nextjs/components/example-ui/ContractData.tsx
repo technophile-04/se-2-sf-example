@@ -19,17 +19,23 @@ export const ContractData = () => {
   const greetingRef = useRef<HTMLDivElement>(null);
 
   const { data: totalCounter } = useScaffoldContractRead({
+    // @ts-expect-error The frontend will changed soon
     contractName: "YourContract",
+    // @ts-expect-error The frontend will changed soon
     functionName: "totalCounter",
   });
 
   const { data: currentGreeting, isLoading: isGreetingLoading } = useScaffoldContractRead({
+    // @ts-expect-error The frontend will changed soon
     contractName: "YourContract",
+    // @ts-expect-error The frontend will changed soon
     functionName: "greeting",
   });
 
   useScaffoldEventSubscriber({
+    // @ts-expect-error The frontend will changed soon
     contractName: "YourContract",
+    // @ts-expect-error The frontend will changed soon
     eventName: "GreetingChange",
     listener: (greetingSetter, newGreeting, premium, value) => {
       console.log(greetingSetter, newGreeting, premium, value);
@@ -41,7 +47,9 @@ export const ContractData = () => {
     isLoading: isLoadingEvents,
     error: errorReadingEvents,
   } = useScaffoldEventHistory({
+    // @ts-expect-error The frontend will changed soon
     contractName: "YourContract",
+    // @ts-expect-error The frontend will changed soon
     eventName: "GreetingChange",
     fromBlock: Number(process.env.NEXT_PUBLIC_DEPLOY_BLOCK) || 0,
     blockData: true,
@@ -49,6 +57,7 @@ export const ContractData = () => {
 
   console.log("events", isLoadingEvents, errorReadingEvents, events);
 
+  // @ts-expect-error The frontend will changed soon
   const { data: yourContract } = useScaffoldContract({ contractName: "YourContract" });
   console.log("yourContract: ", yourContract);
 

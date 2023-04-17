@@ -10,7 +10,9 @@ export const ContractInteraction = () => {
   const [newGreeting, setNewGreeting] = useState("");
 
   const { writeAsync, isLoading } = useScaffoldContractWrite({
+    // @ts-expect-error The frontend will changed soon
     contractName: "YourContract",
+    // @ts-expect-error The frontend will changed soon
     functionName: "setGreeting",
     args: [newGreeting],
     value: "0.01",
