@@ -1,5 +1,8 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
+// import SuperFluidSDK from "@superfluid-finance/sdk-core";
+
+const INITIAL_SUPPLY_GLD = "1000000000";
 
 /**
  * Deploys a contract named "YourContract" using the deployer account and
@@ -19,12 +22,34 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     You can run the `yarn account` command to check your balance in every network.
   */
   const { deployer } = await hre.getNamedAccounts();
-  const { deploy } = hre.deployments;
+  const { deploy, log } = hre.deployments;
+  // const chainId = await hre.getChainId();
+  // const provider = hre.ethers.provider;
+  // const signer = provider.getSigner(deployer);
+
+  // Initializing Superfluid SDK
+  // const sf = await SuperFluidSDK.Framework.create({
+  //   chainId: parseInt(chainId, 10),
+  //   provider,
+  // });
+
+  // Deploying ERC20 Token
+  const gldToken = await deploy("GLDToken", {
+    from: deployer,
+    args: [deployer, hre.ethers.utils.parseEther(INITIAL_SUPPLY_GLD)],
+  });
+
+  // Load token through Superfluid SDK Framework
+  // const gldx = await sf.loadSuperToken(gldToken.address);
+
+  // Approving INITIAL_SUPPLY_GLD SuperToken to MoneyRouter contract
+  log("Approving SuperToken...");
+  // await gldx.approve({receiver : }).exec(signer)
 
   await deploy("MoneyRouter", {
     from: deployer,
     // Contract constructor arguments
-    args: [deployer],
+    args: [deployer, gldToken.address],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.
@@ -39,4 +64,4 @@ export default deployYourContract;
 
 // Tags are useful if you have multiple deploy files and only want to run one of them.
 // e.g. yarn deploy --tags YourContract
-deployYourContract.tags = ["YourContract"];
+deployYourContract.tags = ["MoneyRouter"];
