@@ -1,4 +1,4 @@
-# Scaffold-Eth X SuperFluid Example Repo
+# Scaffold-Eth 2 X SuperFluid Example Repo
 
 ⚠️ This project is currently under active development. Things might break. Feel free to check the open issues & create new ones.
 
